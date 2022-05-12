@@ -1,3 +1,4 @@
+################################################################## Required Packages
 library(data.table)
 library(dplyr)
 library(stringr)
@@ -104,3 +105,6 @@ exclude_overlap = function
   fwrite(new_ss, output_file, col.names = T, row.names = F, quote = F,sep = " ")
   #write.table(new_ss, output_file, col.names = T, row.names = F, quote = F)
 }
+# Sample usage
+# source('/media/leelabsg-storage0/seokho/overlap/code/exclude_overlapped.r')
+# exclude_overlap('input_all.txt', 'input_overlap.txt', 'output.txt',col_all = c("beta","SE","maf","chr","pos","A1","A2"),col_ov = c("BETA","SE","AF_Allele2","CHR","POS","Allele1","Allele2"),n_all = 316253, n_ov = 81538,phenotype = "binary",dropna = T)
