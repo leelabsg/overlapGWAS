@@ -102,7 +102,7 @@ exclude_overlap = function
   print(dim(new_ss))
 
   # Write output
-  fwrite(new_ss, output_file, col.names = T, row.names = F, quote = F,sep = " ")
+  fwrite(new_ss, output_file, col.names = T, row.names = F, quote = F,sep = " ",na = NA)
   #write.table(new_ss, output_file, col.names = T, row.names = F, quote = F)
 }
 # Sample usage
