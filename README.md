@@ -26,5 +26,5 @@ For additional information, please refer to annotations on the provided code.
 ### 051222 update
 1. Changed the joining of all samples and overlapped samples using inner_join()
 2. Skipped the CHR_POS generation when given CHR, POS, allele1 and 2 to reduce time
-3. Changed write.table to fwrite for faster write
+3. Changed write.table to fwrite for faster write (edited option na = NA) 
 4. Added option whether to drop markers that have standard error to NA's
