@@ -1,8 +1,7 @@
-################################################################## Required Packages
-library(dplyr)
 library(data.table)
+library(dplyr)
 library(stringr)
-library(biomaRt)
+#library(biomaRt)
 ################################################################## Function Excluding Overlap Samples 
 # Arguments
 # 1. Input files consist of total gwas summary and overlapped sample GWAS summary (file_all, file_ov)
@@ -12,7 +11,7 @@ library(biomaRt)
 # 4. Sample size of each GWAS
 # 5. Phenotype can be either binary or continiuous
 # 6. Whether to drop markers that has standard error NA's (otherwise use max standard error between overlapped and all)
-exclude_overlap2 = function
+exclude_overlap = function
 (
   file_all,file_ov,output_file, # file paths of Total GWAS summary, overlapped sample GWAS summary, and output 
   col_all = c("BETA","SE","AF_Allele2","CHR","POS","Allele1","Allele2"), # Column names of Total GWAS 
@@ -102,5 +101,6 @@ exclude_overlap2 = function
   print(dim(new_ss))
 
   # Write output
-  write.table(new_ss, output_file, col.names = T, row.names = F, quote = F)
+  fwrite(new_ss, output_file, col.names = T, row.names = F, quote = F,sep = " ")
+  #write.table(new_ss, output_file, col.names = T, row.names = F, quote = F)
 }
