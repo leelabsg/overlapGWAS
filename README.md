@@ -33,4 +33,4 @@ For additional information, please refer to annotations on the provided code.
 1. CHR and POS, Allele1, Allele2 must be provided
 2. Allele1, Allele2 are matched with Allele1 and Allele2 or reversed
 3. More details on sample size, partitioning statistics are created
-**4. Added z-score subtraction method** 
+4. **Added z-score subtraction method** 
