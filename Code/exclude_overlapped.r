@@ -15,10 +15,9 @@ library(stringr)
 # 7. Whether to drop markers that has standard error NA's (otherwise use max standard error between overlapped and all)
 
 # Output
-# 0. Summary statistics of All / Overlapped/ IVW/ Partitioned / Z-scoring 
+# 0. Summary statistics of All / Overlapped/ IVW / Z-scoring 
 # 1. Effect size, Standard Error, Sample size, P-value
-# 2. xty from partitioning Method
-# 3. z scores and effective sample sizes
+# 2. z scores and effective sample sizes
 
 # Transformation of Pvalue into Z-score
 PtoZ = function(P,bet){
@@ -86,27 +85,12 @@ exclude_overlap = function
     BETA_RZ =  z_RZ / sqrt(2*maf*(1-maf)*((eff_all-eff_ov) + z_RZ^2)) 
     sign_RZ = sign(z_RZ); P_RZ = exp(pnorm(abs(z_RZ),lower.tail=F,log.p=T))*2 
   }
-  # Partitioning GWAS
-  if (phenotype=="binary"){
-    xty_all = 0.5*n_all*maf-est_all*n_all*maf/4
-    xty_ov = 0.5*n_ov*maf-est_ov*n_ov*maf/4
-    xty_ex2  = xty_all - xty_ov
-    est_exc2 = (-xty_ex2+0.5*(n_all-n_ov)*maf)*4/((n_all-n_ov)*maf)
-    se_exc2 = sqrt((se_all^2*(n_all*maf)^2-se_ov^2*(n_ov*maf)^2)/(n_exc*maf)^2)
-  }
-  if (phenotype=="continuous"){
-    xty_all = est_all*n_all*maf
-    xty_ov = est_ov*n_ov*maf
-    xty_ex2  = xty_all - xty_ov
-    est_exc2 = xty_ex2/((n_exc)*maf)
-    se_exc2 = sqrt((se_all^2*(n_all*maf)^2-se_ov^2*(n_ov*maf)^2)/(n_exc*maf)^2)
-  }
+
   # Generate Output GWAS Dataframe
     new_ss = data.frame(
         CHR = ss_tmp$CHR, POS = ss_tmp$POS,
         Allele1 = ss_tmp$Allele1, Allele2 = ss_tmp$Allele2, AF_Allele = maf, N = n_exc, N_all = n_all, N_ov = n_ov, 
         BETA_IVW = ss_tmp$BETA_IVW,SE_IVW = ss_tmp$SE_IVW,P_IVW = ss_tmp$P_IVW,
-        BETA_Part = est_exc2,SE_Part = se_exc2,P_Part = exp(pchisq((est_exc2^2)/se_exc2^2,df=1,lower.tail=F,log.p=T)),
         BETA_all = ss_tmp$BETA_all,P_all = ss_tmp$P_all,SE_all = ss_tmp$SE_all, 
         BETA_ov = ss_tmp$BETA_ov,P_ov = ss_tmp$P_ov, SE_ov = ss_tmp$SE_ov,
         xty_all = xty_all, xty_ov = xty_ov
@@ -116,9 +100,8 @@ exclude_overlap = function
     }
   if (!dropna){
   new_ss$SE_IVW[is.na(new_ss$SE_IVW)] = max(ss_tmp$SE_all[is.na(new_ss$SE_IVW)],ss_tmp$SE_ov[is.na(new_ss$SE_IVW)])
-  new_ss$SE_Part[is.na(new_ss$SE_Part)] = max(ss_tmp$SE_all[is.na(new_ss$SE_Part)],ss_tmp$SE_ov[is.na(new_ss$SE_Part)])
   }
-  new_ss = new_ss %>% filter(!is.na(SE_IVW) & !is.na(SE_Part))
+  new_ss = new_ss %>% filter(!is.na(SE_IVW))
   # Check header and size of new overlap excluded GWAS 
   print("New Summary")
   print(head(new_ss))
